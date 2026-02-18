@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grupos de Funciones – Discapacidad</title>
+  <style>
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde:    #1a7f5a;
+      --verde-claro: #24a87a;
+      --azul:     #1a4f8a;
+      --azul-claro: #2563c4;
+      --bg:       #f0f4f8;
+      --blanco:   #ffffff;
+      --gris-txt: #4a5568;
+      --gris-sutil:#e2e8f0;
+      --sombra:   0 8px 32px rgba(26, 79, 138, 0.12);
+      --radio:    18px;
+      --trans:    0.45s cubic-bezier(.4,0,.2,1);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--gris-txt);
+      overflow: hidden; /* evita scroll en iframe */
+    }
+
+    /* =============================================
+       FONDO DECORATIVO
+    ============================================= */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 15% 20%, rgba(36,168,122,.14) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 85% 80%, rgba(37,99,196,.13) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* =============================================
+       LAYOUT PRINCIPAL
+    ============================================= */
+    #app {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px 16px;
+    }
+
+    /* =============================================
+       ENCABEZADO
+    ============================================= */
+    header {
+      width: 100%;
+      max-width: 860px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+      letter-spacing: .04em;
+      background: linear-gradient(120deg, var(--azul), var(--verde));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* =============================================
+       BARRA DE PROGRESO
+    ============================================= */
+    .progress-wrap {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: var(--gris-sutil);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--verde), var(--azul-claro));
+      transition: width var(--trans);
+    }
+
+    .progress-label {
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: .78rem;
+      color: var(--azul);
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    /* =============================================
+       CONTENEDOR DE TARJETAS
+    ============================================= */
+    .cards-viewport {
+      width: 100%;
+      max-width: 860px;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radio);
+    }
+
+    /* =============================================
+       TARJETA
+    ============================================= */
+    .card {
+      display: none;
+      background: var(--blanco);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      overflow: hidden;
+
+      /* Animación entrada */
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity var(--trans), transform var(--trans);
+    }
+
+    .card.active {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card.slide-out-left  { opacity: 0; transform: translateX(-50px); }
+    .card.slide-in-right  { opacity: 0; transform: translateX(50px); }
+    .card.slide-out-right { opacity: 0; transform: translateX(50px); }
+    .card.slide-in-left   { opacity: 0; transform: translateX(-50px); }
+
+    /* --- Imagen --- */
+    .card-img {
+      flex: 0 0 38%;
+      max-width: 38%;
+      min-height: 300px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform .6s ease;
+    }
+
+    .card:hover .card-img img { transform: scale(1.04); }
+
+    /* Overlay degradado izquierda */
+    .card-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 60%, var(--blanco));
+      pointer-events: none;
+    }
+
+    /* Número de función sobre imagen */
+    .card-num {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--verde), var(--azul));
+      color: #fff;
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,.25);
+      z-index: 2;
+    }
+
+    /* --- Contenido texto --- */
+    .card-body {
+      flex: 1;
+      padding: 36px 36px 30px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .card-category {
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--verde-claro);
+    }
+
+    .card-title {
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-weight: 700;
+      font-family: 'Trebuchet MS', sans-serif;
+      color: var(--azul);
+      line-height: 1.3;
+    }
+
+    .card-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .card-items li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: clamp(.85rem, 1.6vw, .98rem);
+      line-height: 1.5;
+    }
+
+    .card-items li::before {
+      content: '';
+      flex-shrink: 0;
+      margin-top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--verde-claro), var(--azul-claro));
+    }
+
+    .card-note {
+      margin-top: 4px;
+      padding: 10px 14px;
+      border-left: 3px solid var(--verde-claro);
+      background: linear-gradient(90deg, rgba(36,168,122,.07), transparent);
+      border-radius: 0 8px 8px 0;
+      font-size: clamp(.78rem, 1.4vw, .88rem);
+      font-style: italic;
+      color: var(--azul);
+      line-height: 1.55;
+    }
+
+    /* =============================================
+       CONTROLES
+    ============================================= */
+    .controls {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 26px;
+      border: none;
+      border-radius: 99px;
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: .88rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      cursor: pointer;
+      transition: background .25s, transform .15s, box-shadow .25s;
+    }
+
+    .btn-prev {
+      background: #fff;
+      color: var(--azul);
+      box-shadow: 0 2px 10px rgba(26,79,138,.15);
+      border: 1.5px solid var(--gris-sutil);
+    }
+
+    .btn-prev:hover:not(:disabled) {
+      background: var(--gris-sutil);
+      transform: translateX(-3px);
+    }
+
+    .btn-next {
+      background: linear-gradient(120deg, var(--verde), var(--azul-claro));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(26,79,138,.3);
+    }
+
+    .btn-next:hover:not(:disabled) {
+      transform: translateX(3px);
+      box-shadow: 0 6px 22px rgba(26,79,138,.4);
+    }
+
+    .btn:disabled { opacity: .35; cursor: not-allowed; transform: none !important; }
+
+    /* Puntos indicadores */
+    .dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--gris-sutil);
+      transition: background .3s, transform .3s;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: linear-gradient(135deg, var(--verde), var(--azul-claro));
+      transform: scale(1.4);
+    }
+
+    /* =============================================
+       BOTÓN AUDIO (esquina)
+    ============================================= */
+    #audioBtn {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      z-index: 100;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--verde), var(--azul));
+      color: #fff;
+      font-size: 1.15rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(26,79,138,.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    #audioBtn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(26,79,138,.45); }
+    #audioBtn title { display: none; }
+
+    /* Botón visible de reproducir (autoplay bloqueado) */
+    #playFallback {
+      display: none;
+      position: fixed;
+      bottom: 70px;
+      right: 14px;
+      z-index: 100;
+      padding: 8px 16px;
+      border-radius: 99px;
+      border: none;
+      background: var(--verde);
+      color: #fff;
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 3px 12px rgba(26,127,90,.35); }
+      50%      { box-shadow: 0 6px 20px rgba(26,127,90,.6); }
+    }
+
+    /* =============================================
+       RESPONSIVE MÓVIL
+    ============================================= */
+    @media (max-width: 600px) {
+      html, body { overflow: auto; }
+
+      .card.active { flex-direction: column; }
+
+      .card-img {
+        flex: none;
+        max-width: 100%;
+        height: 180px;
+        min-height: unset;
+      }
+
+      .card-img::after {
+        background: linear-gradient(180deg, transparent 60%, var(--blanco));
+      }
+
+      .card-body { padding: 22px 20px 20px; }
+
+      .btn { padding: 9px 18px; font-size: .82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Encabezado -->
+  <header>
+    <h1>Grupos de Funciones Relacionadas con la Discapacidad</h1>
+  </header>
+
+  <!-- Barra de progreso -->
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:20%"></div>
+    </div>
+    <span class="progress-label" id="progressLabel">1 de 5</span>
+  </div>
+
+  <!-- ============ TARJETAS ============ -->
+  <div class="cards-viewport">
+
+    <!-- Tarjeta 1 -->
+    <div class="card active" id="card-0">
+      <div class="card-img">
+        <span class="card-num">1</span>
+        <img src="img/cognitivo.jpg" alt="Funciones cognitivas y de aprendizaje" />
+      </div>
+      <div class="card-body">
+        <span class="card-category">Grupo 1</span>
+        <h2 class="card-title">Funciones cognitivas y de aprendizaje</h2>
+        <ul class="card-items">
+          <li>Pensar</li>
+          <li>Aprender</li>
+        </ul>
+        <p class="card-note">
+          Ambas se refieren a procesos mentales, comprensión y desarrollo intelectual.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 2 -->
+    <div class="card" id="card-1">
+      <div class="card-img">
+        <span class="card-num">2</span>
+        <img src="img/comunicacion.jpg" alt="Funciones de comunicación" />
+      </div>
+      <div class="card-body">
+        <span class="card-category">Grupo 2</span>
+        <h2 class="card-title">Funciones de comunicación</h2>
+        <ul class="card-items">
+          <li>Hablar</li>
+          <li>Oír</li>
+          <li>Ver</li>
+        </ul>
+        <p class="card-note">
+          Se agrupan porque afectan la interacción y transmisión de información con otras personas.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 3 -->
+    <div class="card" id="card-2">
+      <div class="card-img">
+        <span class="card-num">3</span>
+        <img src="img/fisico.jpg" alt="Funciones físicas y motoras" />
+      </div>
+      <div class="card-body">
+        <span class="card-category">Grupo 3</span>
+        <h2 class="card-title">Funciones físicas y motoras</h2>
+        <ul class="card-items">
+          <li>Caminar</li>
+          <li>Realizar tareas manuales</li>
+        </ul>
+        <p class="card-note">
+          Ambas implican movilidad y coordinación motora.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 4 -->
+    <div class="card" id="card-3">
+      <div class="card-img">
+        <span class="card-num">4</span>
+        <img src="img/autonomia.jpg" alt="Funciones de autonomía personal" />
+      </div>
+      <div class="card-body">
+        <span class="card-category">Grupo 4</span>
+        <h2 class="card-title">Funciones de autonomía personal</h2>
+        <ul class="card-items">
+          <li>Trabajar</li>
+          <li>Velar por sí mismo</li>
+        </ul>
+        <p class="card-note">
+          Se relacionan con independencia, desempeño laboral y cuidado personal.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 5 -->
+    <div class="card" id="card-4">
+      <div class="card-img">
+        <span class="card-num">5</span>
+        <img src="img/vital.jpg" alt="Funciones vitales" />
+      </div>
+      <div class="card-body">
+        <span class="card-category">Grupo 5</span>
+        <h2 class="card-title">Funciones vitales</h2>
+        <ul class="card-items">
+          <li>Respirar</li>
+        </ul>
+        <p class="card-note">
+          Es una función esencial y se considera aparte por su carácter indispensable para la vida.
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <!-- /cards-viewport -->
+
+  <!-- Controles de navegación -->
+  <div class="controls">
+    <button class="btn btn-prev" id="btnPrev" onclick="changeCard(-1)" disabled>
+      &#8592; Anterior
+    </button>
+
+    <div class="dots" id="dots">
+      <div class="dot active" onclick="goTo(0)"></div>
+      <div class="dot" onclick="goTo(1)"></div>
+      <div class="dot" onclick="goTo(2)"></div>
+      <div class="dot" onclick="goTo(3)"></div>
+      <div class="dot" onclick="goTo(4)"></div>
+    </div>
+
+    <button class="btn btn-next" id="btnNext" onclick="changeCard(1)">
+      Siguiente &#8594;
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<!-- Audio local -->
+<audio id="mainAudio" src="audio/modulo3.mp3" preload="auto"></audio>
+
+<!-- Botón altavoz fijo -->
+<button id="audioBtn" title="Reproducir audio" onclick="replayAudio()">&#128266;</button>
+
+<!-- Botón fallback si autoplay bloqueado -->
+<button id="playFallback" onclick="startAudio()">&#9654; Reproducir audio</button>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  /* ---- Estado ---- */
+  var current = 0;
+  var total   = 5;
+  var isAnimating = false;
+
+  /* ---- Elementos DOM ---- */
+  var cards       = document.querySelectorAll('.card');
+  var dots        = document.querySelectorAll('.dot');
+  var btnPrev     = document.getElementById('btnPrev');
+  var btnNext     = document.getElementById('btnNext');
+  var progressFill  = document.getElementById('progressFill');
+  var progressLabel = document.getElementById('progressLabel');
+  var audio       = document.getElementById('mainAudio');
+  var playFallback = document.getElementById('playFallback');
+
+  /* ---- Inicializar primera tarjeta ---- */
+  window.addEventListener('load', function () {
+    // Mostrar primera tarjeta con animación
+    requestAnimationFrame(function () {
+      cards[0].classList.add('visible');
+    });
+
+    // Intentar autoplay
+    var promise = audio.play();
+    if (promise !== undefined) {
+      promise.catch(function () {
+        // Autoplay bloqueado: mostrar botón
+        playFallback.style.display = 'block';
+      });
+    }
+  });
+
+  /* ---- Navegar tarjetas ---- */
+  function changeCard(dir) {
+    var next = current + dir;
+    if (next < 0 || next >= total || isAnimating) return;
+    goTo(next, dir);
+  }
+
+  function goTo(index, dir) {
+    if (index === current || isAnimating) return;
+    isAnimating = true;
+
+    // Determinar dirección si no fue provista
+    if (dir === undefined) dir = index > current ? 1 : -1;
+
+    var outClass = dir > 0 ? 'slide-out-left'  : 'slide-out-right';
+    var inClass  = dir > 0 ? 'slide-in-right'  : 'slide-in-left';
+
+    var oldCard = cards[current];
+    var newCard = cards[index];
+
+    // Salida tarjeta actual
+    oldCard.classList.remove('visible');
+    oldCard.classList.add(outClass);
+
+    setTimeout(function () {
+      oldCard.classList.remove('active', outClass);
+
+      // Entrada tarjeta nueva
+      newCard.classList.add('active', inClass);
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          newCard.classList.remove(inClass);
+          newCard.classList.add('visible');
+        });
+      });
+
+      current = index;
+      updateUI();
+
+      setTimeout(function () { isAnimating = false; }, 480);
+    }, 380);
+  }
+
+  /* ---- Actualizar UI ---- */
+  function updateUI() {
+    // Botones
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+
+    // Puntos
+    dots.forEach(function (d, i) {
+      d.classList.toggle('active', i === current);
+    });
+
+    // Barra de progreso
+    var pct = ((current + 1) / total) * 100;
+    progressFill.style.width = pct + '%';
+    progressLabel.textContent = (current + 1) + ' de ' + total;
+  }
+
+  /* ---- Audio ---- */
+  function startAudio() {
+    audio.play().then(function () {
+      playFallback.style.display = 'none';
+    }).catch(function () {
+      playFallback.style.display = 'block';
+    });
+  }
+
+  function replayAudio() {
+    audio.currentTime = 0;
+    startAudio();
+  }
+
+  /* ---- Teclado ---- */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  changeCard(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    changeCard(-1);
+  });
+</script>
+
+</body>
+</html>
