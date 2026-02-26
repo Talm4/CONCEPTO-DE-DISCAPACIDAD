@@ -89,53 +89,24 @@
     /* ── ZONA LOGO ── */
     .header-logo {
       flex-shrink: 0;
-      width: 58px;
-      height: 58px;
-      border-radius: var(--radio-sm);
-      background: var(--verde-bg);
-      border: 2px dashed var(--verde-claro);
+      height: 56px;
+      width: auto;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
-      overflow: hidden;
-      position: relative;
     }
 
-    /*
-     * ─────────────────────────────────────────────────
-     * PARA INSERTAR TU LOGO:
-     * 1. Descomenta la etiqueta <img> dentro de .header-logo en el HTML.
-     * 2. Cambia src="img/logo.png" por la ruta de tu imagen.
-     * 3. Puedes borrar el span .logo-ph-icon y .logo-ph-text cuando uses imagen real.
-     * ─────────────────────────────────────────────────
-     */
     .header-logo img {
-      width: 100%;
       height: 100%;
+      width: auto;
+      max-width: 160px;
       object-fit: contain;
       display: block;
     }
 
-    .logo-ph-icon {
-      font-size: 1.3rem;
-      line-height: 1;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .logo-ph-text {
-      font-size: .52rem;
-      font-weight: 800;
-      color: var(--verde-oscuro);
-      text-align: center;
-      line-height: 1.2;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      pointer-events: none;
-      user-select: none;
-    }
+    /* Placeholder solo si no hay imagen */
+    .logo-ph-icon { display: none; }
+    .logo-ph-text { display: none; }
 
     .header-sep {
       width: 1px;
@@ -146,21 +117,12 @@
 
     .header-text { flex: 1; min-width: 0; }
 
-    .header-text .eyebrow {
-      font-size: .68rem;
-      font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--verde-oscuro);
-      margin-bottom: 4px;
-    }
-
     .header-text h1 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(.95rem, 2.3vw, 1.3rem);
+      font-size: clamp(1.1rem, 2.6vw, 1.5rem);
       font-weight: 700;
       color: var(--gris-900);
-      line-height: 1.25;
+      line-height: 1.2;
     }
 
     .header-accent {
@@ -544,7 +506,7 @@
       body { padding: 12px 10px 24px; justify-content: flex-start; }
 
       header { padding: 14px 16px; gap: 12px; }
-      .header-logo { width: 46px; height: 46px; }
+      .header-logo { height: 44px; }
       .header-sep  { height: 36px; }
       .header-text h1 { font-size: .95rem; }
 
@@ -584,17 +546,15 @@
        ENCABEZADO
   ════════════════════════════════════════ -->
   <header>
-    <div class="header-logo" role="img" aria-label="Logo de la organización">
-      <img src="img/Logo.png" alt="TALMA APRENDE">
-      <span class="logo-ph-icon" aria-hidden="true"></span>
-      <span class="logo-ph-text">TALMA APRENDE</span>
+
+    <div class="header-logo">
+      <img src="img/Logo.png" alt="TALMA APRENDE" />
     </div>
 
     <div class="header-sep" aria-hidden="true"></div>
 
     <div class="header-text">
-      <p class="eyebrow">Módulo 3 · Formación en discapacidad</p>
-      <h1>Grupos de Funciones Relacionadas con la Discapacidad</h1>
+      <h1>Conceptos de Discapacidad</h1>
       <div class="header-accent" aria-hidden="true"></div>
     </div>
 
@@ -895,6 +855,3 @@
 
 </body>
 </html>
-
-
-
