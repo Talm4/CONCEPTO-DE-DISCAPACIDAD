@@ -4,99 +4,190 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grupos de Funciones – Discapacidad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     /* =============================================
-       RESET & BASE
+       TOKENS
     ============================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --verde:    #1a7f5a;
-      --verde-claro: #24a87a;
-      --azul:     #1a4f8a;
-      --azul-claro: #2563c4;
-      --bg:       #f0f4f8;
-      --blanco:   #ffffff;
-      --gris-txt: #4a5568;
-      --gris-sutil:#e2e8f0;
-      --sombra:   0 8px 32px rgba(26, 79, 138, 0.12);
-      --radio:    18px;
-      --trans:    0.45s cubic-bezier(.4,0,.2,1);
+      --verde:        #78bb1e;
+      --verde-oscuro: #5c9016;
+      --verde-claro:  #92d122;
+      --verde-bg:     #f2fadf;
+      --verde-mid:    #dff0b0;
+
+      --gris-900:  #1c2228;
+      --gris-700:  #374151;
+      --gris-500:  #6b7280;
+      --gris-200:  #e5e7eb;
+      --gris-100:  #f3f4f6;
+      --blanco:    #ffffff;
+      --oscuro:    #1e2d0e;
+
+      --sombra-sm: 0 1px 4px rgba(0,0,0,.08);
+      --sombra-md: 0 6px 24px rgba(0,0,0,.10);
+
+      --radio:    16px;
+      --radio-sm: 8px;
+      --trans:    0.4s cubic-bezier(.4,0,.2,1);
+      --trans-f:  0.2s ease;
     }
 
-    html, body {
-      height: 100%;
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: var(--bg);
-      color: var(--gris-txt);
-      overflow: hidden; /* evita scroll en iframe */
+    html { -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: 'Nunito Sans', system-ui, sans-serif;
+      background: var(--gris-100);
+      color: var(--gris-700);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 32px;
     }
 
-    /* =============================================
-       FONDO DECORATIVO
-    ============================================= */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse 60% 40% at 15% 20%, rgba(36,168,122,.14) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 50% at 85% 80%, rgba(37,99,196,.13) 0%, transparent 70%);
+        radial-gradient(ellipse 70% 50% at 5% 0%, rgba(120,187,30,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 95% 100%, rgba(120,187,30,.08) 0%, transparent 60%);
       pointer-events: none;
       z-index: 0;
     }
 
     /* =============================================
-       LAYOUT PRINCIPAL
+       APP WRAPPER
     ============================================= */
     #app {
       position: relative;
       z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px 16px;
+      width: 100%;
+      max-width: 920px;
     }
 
     /* =============================================
        ENCABEZADO
     ============================================= */
     header {
-      width: 100%;
-      max-width: 860px;
-      margin-bottom: 18px;
-      text-align: center;
+      background: var(--blanco);
+      border-radius: var(--radio) var(--radio) 0 0;
+      border: 1px solid var(--gris-200);
+      border-bottom: none;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
-    header h1 {
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    /* ── ZONA LOGO ── */
+    .header-logo {
+      flex-shrink: 0;
+      width: 58px;
+      height: 58px;
+      border-radius: var(--radio-sm);
+      background: var(--verde-bg);
+      border: 2px dashed var(--verde-claro);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /*
+     * ─────────────────────────────────────────────────
+     * PARA INSERTAR TU LOGO:
+     * 1. Descomenta la etiqueta <img> dentro de .header-logo en el HTML.
+     * 2. Cambia src="img/logo.png" por la ruta de tu imagen.
+     * 3. Puedes borrar el span .logo-ph-icon y .logo-ph-text cuando uses imagen real.
+     * ─────────────────────────────────────────────────
+     */
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .logo-ph-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .logo-ph-text {
+      font-size: .52rem;
+      font-weight: 800;
+      color: var(--verde-oscuro);
+      text-align: center;
+      line-height: 1.2;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .header-sep {
+      width: 1px;
+      height: 44px;
+      background: var(--gris-200);
+      flex-shrink: 0;
+    }
+
+    .header-text { flex: 1; min-width: 0; }
+
+    .header-text .eyebrow {
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--verde-oscuro);
+      margin-bottom: 4px;
+    }
+
+    .header-text h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(.95rem, 2.3vw, 1.3rem);
       font-weight: 700;
-      font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-      letter-spacing: .04em;
-      background: linear-gradient(120deg, var(--azul), var(--verde));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--gris-900);
+      line-height: 1.25;
+    }
+
+    .header-accent {
+      margin-top: 7px;
+      width: 34px;
+      height: 3px;
+      background: var(--verde);
+      border-radius: 99px;
     }
 
     /* =============================================
        BARRA DE PROGRESO
     ============================================= */
-    .progress-wrap {
-      width: 100%;
-      max-width: 860px;
+    .progress-strip {
+      background: var(--blanco);
+      border-left: 1px solid var(--gris-200);
+      border-right: 1px solid var(--gris-200);
+      padding: 10px 28px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 14px;
     }
 
     .progress-bar-bg {
       flex: 1;
-      height: 6px;
-      background: var(--gris-sutil);
+      height: 5px;
+      background: var(--gris-200);
       border-radius: 99px;
       overflow: hidden;
     }
@@ -104,113 +195,119 @@
     .progress-bar-fill {
       height: 100%;
       border-radius: 99px;
-      background: linear-gradient(90deg, var(--verde), var(--azul-claro));
+      background: linear-gradient(90deg, var(--verde-oscuro), var(--verde-claro));
       transition: width var(--trans);
     }
 
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
     .progress-label {
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: .78rem;
-      color: var(--azul);
+      font-size: .74rem;
+      font-weight: 700;
+      color: var(--gris-500);
       white-space: nowrap;
-      font-weight: 600;
+    }
+
+    .progress-pct {
+      font-size: .68rem;
+      font-weight: 800;
+      color: var(--verde-oscuro);
+      background: var(--verde-bg);
+      border-radius: 99px;
+      padding: 2px 8px;
     }
 
     /* =============================================
-       CONTENEDOR DE TARJETAS
+       TARJETAS
     ============================================= */
     .cards-viewport {
-      width: 100%;
-      max-width: 860px;
       position: relative;
-      overflow: hidden;
-      border-radius: var(--radio);
+      width: 100%;
     }
 
-    /* =============================================
-       TARJETA
-    ============================================= */
     .card {
       display: none;
       background: var(--blanco);
-      border-radius: var(--radio);
-      box-shadow: var(--sombra);
+      border: 1px solid var(--gris-200);
+      border-top: none;
       overflow: hidden;
-
-      /* Animación entrada */
       opacity: 0;
-      transform: translateX(40px);
+      transform: translateX(36px);
       transition: opacity var(--trans), transform var(--trans);
     }
 
-    .card.active {
-      display: flex;
-      flex-direction: row;
-    }
+    .card.active  { display: flex; flex-direction: row; }
+    .card.visible { opacity: 1; transform: translateX(0); }
 
-    .card.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    .card.slide-out-left  { opacity: 0; transform: translateX(-44px); }
+    .card.slide-in-right  { opacity: 0; transform: translateX(44px); }
+    .card.slide-out-right { opacity: 0; transform: translateX(44px); }
+    .card.slide-in-left   { opacity: 0; transform: translateX(-44px); }
 
-    .card.slide-out-left  { opacity: 0; transform: translateX(-50px); }
-    .card.slide-in-right  { opacity: 0; transform: translateX(50px); }
-    .card.slide-out-right { opacity: 0; transform: translateX(50px); }
-    .card.slide-in-left   { opacity: 0; transform: translateX(-50px); }
-
-    /* --- Imagen --- */
-    .card-img {
+    /* ── Panel imagen ── */
+    .card-img-panel {
       flex: 0 0 38%;
       max-width: 38%;
-      min-height: 300px;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
+      background: var(--verde-bg);
+      min-height: 340px;
     }
 
-    .card-img img {
+    .card-img-panel img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
       display: block;
-      transition: transform .6s ease;
+      transition: transform .65s ease;
     }
 
-    .card:hover .card-img img { transform: scale(1.04); }
+    .card:hover .card-img-panel img { transform: scale(1.04); }
 
-    /* Overlay degradado izquierda */
-    .card-img::after {
+    .card-img-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--verde-oscuro), var(--verde-claro));
+      z-index: 3;
+    }
+
+    .card-img-panel::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent 60%, var(--blanco));
+      background: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.88));
       pointer-events: none;
+      z-index: 1;
     }
 
-    /* Número de función sobre imagen */
-    .card-num {
+    .card-badge {
       position: absolute;
-      top: 14px;
-      left: 14px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--verde), var(--azul));
-      color: #fff;
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,.25);
-      z-index: 2;
+      bottom: 16px;
+      left: 16px;
+      z-index: 4;
+      background: var(--verde);
+      color: var(--oscuro);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      border-radius: 4px;
+      box-shadow: var(--sombra-sm);
     }
 
-    /* --- Contenido texto --- */
+    /* ── Cuerpo texto ── */
     .card-body {
       flex: 1;
-      padding: 36px 36px 30px 28px;
+      padding: 34px 36px 28px 30px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -218,20 +315,43 @@
     }
 
     .card-category {
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .12em;
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .13em;
       text-transform: uppercase;
-      color: var(--verde-claro);
+      color: var(--verde-oscuro);
+      background: var(--verde-bg);
+      border: 1px solid var(--verde-mid);
+      border-radius: 4px;
+      padding: 4px 10px;
     }
 
     .card-title {
-      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.05rem, 2.3vw, 1.4rem);
       font-weight: 700;
-      font-family: 'Trebuchet MS', sans-serif;
-      color: var(--azul);
-      line-height: 1.3;
+      color: var(--gris-900);
+      line-height: 1.25;
+    }
+
+    .card-rule {
+      width: 100%;
+      height: 1px;
+      background: var(--gris-200);
+      border: none;
+      flex-shrink: 0;
+    }
+
+    .section-label {
+      font-size: .66rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--gris-500);
+      margin-bottom: 8px;
     }
 
     .card-items {
@@ -243,368 +363,472 @@
 
     .card-items li {
       display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      font-size: clamp(.85rem, 1.6vw, .98rem);
-      line-height: 1.5;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(.88rem, 1.7vw, 1rem);
+      font-weight: 700;
+      color: var(--gris-900);
     }
 
     .card-items li::before {
       content: '';
       flex-shrink: 0;
-      margin-top: 6px;
       width: 8px;
       height: 8px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--verde-claro), var(--azul-claro));
+      border-radius: 2px;
+      background: var(--verde);
     }
 
     .card-note {
-      margin-top: 4px;
-      padding: 10px 14px;
-      border-left: 3px solid var(--verde-claro);
-      background: linear-gradient(90deg, rgba(36,168,122,.07), transparent);
-      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      background: var(--verde-bg);
+      border-left: 3px solid var(--verde);
+      border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
       font-size: clamp(.78rem, 1.4vw, .88rem);
-      font-style: italic;
-      color: var(--azul);
-      line-height: 1.55;
+      color: var(--gris-700);
+      line-height: 1.65;
+    }
+
+    .card-note strong {
+      color: var(--verde-oscuro);
+      font-weight: 800;
     }
 
     /* =============================================
-       CONTROLES
+       BARRA INFERIOR
     ============================================= */
-    .controls {
-      width: 100%;
-      max-width: 860px;
+    .bottom-bar {
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-top: 3px solid var(--verde);
+      border-radius: 0 0 var(--radio) var(--radio);
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 18px;
       gap: 12px;
     }
 
-    .btn {
+    .btn-nav {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 10px 26px;
+      padding: 9px 22px;
+      border-radius: 6px;
       border: none;
-      border-radius: 99px;
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: .88rem;
-      font-weight: 700;
-      letter-spacing: .03em;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: .84rem;
+      font-weight: 800;
       cursor: pointer;
-      transition: background .25s, transform .15s, box-shadow .25s;
+      transition: background var(--trans-f), transform var(--trans-f), box-shadow var(--trans-f);
+      letter-spacing: .03em;
+    }
+
+    .btn-nav:focus-visible {
+      outline: 3px solid var(--verde);
+      outline-offset: 2px;
     }
 
     .btn-prev {
-      background: #fff;
-      color: var(--azul);
-      box-shadow: 0 2px 10px rgba(26,79,138,.15);
-      border: 1.5px solid var(--gris-sutil);
+      background: var(--gris-100);
+      color: var(--gris-700);
+      border: 1px solid var(--gris-200);
     }
 
     .btn-prev:hover:not(:disabled) {
-      background: var(--gris-sutil);
-      transform: translateX(-3px);
+      background: var(--gris-200);
+      transform: translateX(-2px);
     }
 
     .btn-next {
-      background: linear-gradient(120deg, var(--verde), var(--azul-claro));
-      color: #fff;
-      box-shadow: 0 4px 18px rgba(26,79,138,.3);
+      background: var(--verde);
+      color: var(--oscuro);
+      box-shadow: 0 3px 12px rgba(120,187,30,.35);
     }
 
     .btn-next:hover:not(:disabled) {
-      transform: translateX(3px);
-      box-shadow: 0 6px 22px rgba(26,79,138,.4);
+      background: var(--verde-oscuro);
+      color: var(--blanco);
+      transform: translateX(2px);
+      box-shadow: 0 5px 18px rgba(92,144,22,.45);
     }
 
-    .btn:disabled { opacity: .35; cursor: not-allowed; transform: none !important; }
+    .btn-nav:disabled {
+      opacity: .32;
+      cursor: not-allowed;
+      transform: none !important;
+    }
 
-    /* Puntos indicadores */
     .dots {
       display: flex;
       gap: 7px;
+      align-items: center;
     }
 
     .dot {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: var(--gris-sutil);
-      transition: background .3s, transform .3s;
+      background: var(--gris-200);
+      border: none;
+      padding: 0;
       cursor: pointer;
+      transition: background var(--trans-f), transform var(--trans-f), width var(--trans-f), border-radius var(--trans-f);
     }
 
-    .dot.active {
-      background: linear-gradient(135deg, var(--verde), var(--azul-claro));
-      transform: scale(1.4);
+    .dot:focus-visible {
+      outline: 3px solid var(--verde);
+      outline-offset: 3px;
+    }
+
+    .dot[aria-current="true"] {
+      background: var(--verde);
+      transform: scale(1.3);
+      width: 22px;
+      border-radius: 4px;
     }
 
     /* =============================================
-       BOTÓN AUDIO (esquina)
+       FALLBACK AUDIO — único botón visible
     ============================================= */
-    #audioBtn {
-      position: fixed;
-      bottom: 18px;
-      right: 18px;
-      z-index: 100;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, var(--verde), var(--azul));
-      color: #fff;
-      font-size: 1.15rem;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(26,79,138,.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    #audioBtn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(26,79,138,.45); }
-    #audioBtn title { display: none; }
-
-    /* Botón visible de reproducir (autoplay bloqueado) */
     #playFallback {
       display: none;
       position: fixed;
-      bottom: 70px;
-      right: 14px;
-      z-index: 100;
-      padding: 8px 16px;
-      border-radius: 99px;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      padding: 10px 24px;
+      border-radius: 6px;
       border: none;
       background: var(--verde);
-      color: #fff;
-      font-family: 'Trebuchet MS', sans-serif;
-      font-size: .78rem;
-      font-weight: 700;
+      color: var(--oscuro);
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: .82rem;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 3px 12px rgba(0,0,0,.2);
-      animation: pulse 2s infinite;
+      box-shadow: 0 4px 18px rgba(120,187,30,.45);
+      align-items: center;
+      gap: 7px;
+      letter-spacing: .03em;
+    }
+
+    #playFallback:focus-visible {
+      outline: 3px solid var(--oscuro);
+      outline-offset: 2px;
+    }
+
+    #playFallback.show {
+      display: inline-flex;
+      animation: pulse 2.2s infinite;
     }
 
     @keyframes pulse {
-      0%,100% { box-shadow: 0 3px 12px rgba(26,127,90,.35); }
-      50%      { box-shadow: 0 6px 20px rgba(26,127,90,.6); }
+      0%,100% { box-shadow: 0 4px 18px rgba(120,187,30,.35); }
+      50%      { box-shadow: 0 10px 30px rgba(120,187,30,.65); }
+    }
+
+    /* =============================================
+       ACCESIBILIDAD
+    ============================================= */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
 
     /* =============================================
        RESPONSIVE MÓVIL
     ============================================= */
-    @media (max-width: 600px) {
-      html, body { overflow: auto; }
+    @media (max-width: 640px) {
+      body { padding: 12px 10px 24px; justify-content: flex-start; }
+
+      header { padding: 14px 16px; gap: 12px; }
+      .header-logo { width: 46px; height: 46px; }
+      .header-sep  { height: 36px; }
+      .header-text h1 { font-size: .95rem; }
+
+      .progress-strip { padding: 8px 16px; }
 
       .card.active { flex-direction: column; }
 
-      .card-img {
+      .card-img-panel {
         flex: none;
         max-width: 100%;
-        height: 180px;
+        width: 100%;
+        height: 190px;
         min-height: unset;
       }
 
-      .card-img::after {
-        background: linear-gradient(180deg, transparent 60%, var(--blanco));
+      .card-img-panel::after {
+        background: linear-gradient(180deg, transparent 40%, rgba(255,255,255,.9));
       }
 
-      .card-body { padding: 22px 20px 20px; }
+      .card-badge { bottom: 12px; left: 12px; }
+      .card-body  { padding: 20px 18px 18px; gap: 11px; }
+      .bottom-bar { padding: 12px 16px; }
+      .btn-nav    { padding: 8px 14px; font-size: .8rem; }
+    }
 
-      .btn { padding: 9px 18px; font-size: .82rem; }
+    @media (max-width: 380px) {
+      .btn-nav { padding: 7px 10px; font-size: .75rem; }
+      .dots { gap: 5px; }
     }
   </style>
 </head>
 <body>
 
-<div id="app">
+<div id="app" role="main">
 
-  <!-- Encabezado -->
+  <!-- ═══════════════════════════════════════
+       ENCABEZADO
+  ════════════════════════════════════════ -->
   <header>
-    <h1>Grupos de Funciones Relacionadas con la Discapacidad</h1>
+    <div class="header-logo" role="img" aria-label="Logo de la organización">
+      <!-- Reemplaza aquí con tu imagen: <img src="img/logo.png" alt="TALMA APRENDE"> -->
+      <span class="logo-ph-icon" aria-hidden="true">🏢</span>
+      <span class="logo-ph-text">Tu Logo</span>
+    </div>
+
+    <div class="header-sep" aria-hidden="true"></div>
+
+    <div class="header-text">
+      <p class="eyebrow">Módulo 3 · Formación en discapacidad</p>
+      <h1>Grupos de Funciones Relacionadas con la Discapacidad</h1>
+      <div class="header-accent" aria-hidden="true"></div>
+    </div>
+
   </header>
 
-  <!-- Barra de progreso -->
-  <div class="progress-wrap">
-    <div class="progress-bar-bg">
+  <!-- ═══════════════════════════════════════
+       PROGRESO
+  ════════════════════════════════════════ -->
+  <div class="progress-strip" role="status" aria-label="Progreso">
+    <div class="progress-bar-bg" aria-hidden="true">
       <div class="progress-bar-fill" id="progressFill" style="width:20%"></div>
     </div>
-    <span class="progress-label" id="progressLabel">1 de 5</span>
+    <div class="progress-meta">
+      <span class="progress-label" id="progressLabel">1 de 5</span>
+      <span class="progress-pct"   id="progressPct"   aria-hidden="true">20%</span>
+    </div>
   </div>
 
-  <!-- ============ TARJETAS ============ -->
-  <div class="cards-viewport">
+  <!-- ═══════════════════════════════════════
+       TARJETAS
+  ════════════════════════════════════════ -->
+  <div class="cards-viewport" role="region" aria-label="Contenido de la presentación">
+
+    <div aria-live="polite" aria-atomic="true" class="sr-only" id="liveRegion"></div>
 
     <!-- Tarjeta 1 -->
-    <div class="card active" id="card-0">
-      <div class="card-img">
-        <span class="card-num">1</span>
-        <img src="img/cognitivo.jpg" alt="Funciones cognitivas y de aprendizaje" />
+    <article class="card active" id="card-0"
+             aria-label="Tarjeta 1 de 5: Funciones cognitivas y de aprendizaje">
+      <div class="card-img-panel">
+        <span class="card-badge" aria-hidden="true">Grupo 01</span>
+        <img src="img/IMG1.png"
+             alt="Persona leyendo un libro, representando los procesos mentales de pensar y aprender." />
       </div>
       <div class="card-body">
-        <span class="card-category">Grupo 1</span>
-        <h2 class="card-title">Funciones cognitivas y de aprendizaje</h2>
-        <ul class="card-items">
-          <li>Pensar</li>
-          <li>Aprender</li>
-        </ul>
+        <span class="card-category">Grupo 1 de 5</span>
+        <h2 class="card-title">Funciones cognitivas<br>y de aprendizaje</h2>
+        <hr class="card-rule" aria-hidden="true" />
+        <div>
+          <p class="section-label">Conceptos clave</p>
+          <ul class="card-items" aria-label="Conceptos del grupo">
+            <li>Pensar</li>
+            <li>Aprender</li>
+          </ul>
+        </div>
         <p class="card-note">
-          Ambas se refieren a procesos mentales, comprensión y desarrollo intelectual.
+          <strong>¿Por qué se agrupan?</strong> Ambas se refieren a procesos mentales, comprensión y desarrollo intelectual.
         </p>
       </div>
-    </div>
+    </article>
 
     <!-- Tarjeta 2 -->
-    <div class="card" id="card-1">
-      <div class="card-img">
-        <span class="card-num">2</span>
-        <img src="img/comunicacion.jpg" alt="Funciones de comunicación" />
+    <article class="card" id="card-1"
+             aria-label="Tarjeta 2 de 5: Funciones de comunicación">
+      <div class="card-img-panel">
+        <span class="card-badge" aria-hidden="true">Grupo 02</span>
+        <img src="img/IMG2.png"
+             alt="Dos personas conversando, simbolizando hablar, oír y ver como medios de comunicación." />
       </div>
       <div class="card-body">
-        <span class="card-category">Grupo 2</span>
-        <h2 class="card-title">Funciones de comunicación</h2>
-        <ul class="card-items">
-          <li>Hablar</li>
-          <li>Oír</li>
-          <li>Ver</li>
-        </ul>
+        <span class="card-category">Grupo 2 de 5</span>
+        <h2 class="card-title">Funciones de<br>comunicación</h2>
+        <hr class="card-rule" aria-hidden="true" />
+        <div>
+          <p class="section-label">Conceptos clave</p>
+          <ul class="card-items" aria-label="Conceptos del grupo">
+            <li>Hablar</li>
+            <li>Oír</li>
+            <li>Ver</li>
+          </ul>
+        </div>
         <p class="card-note">
-          Se agrupan porque afectan la interacción y transmisión de información con otras personas.
+          <strong>¿Por qué se agrupan?</strong> Afectan la interacción y transmisión de información con otras personas.
         </p>
       </div>
-    </div>
+    </article>
 
     <!-- Tarjeta 3 -->
-    <div class="card" id="card-2">
-      <div class="card-img">
-        <span class="card-num">3</span>
-        <img src="img/fisico.jpg" alt="Funciones físicas y motoras" />
+    <article class="card" id="card-2"
+             aria-label="Tarjeta 3 de 5: Funciones físicas y motoras">
+      <div class="card-img-panel">
+        <span class="card-badge" aria-hidden="true">Grupo 03</span>
+        <img src="img/IMG3.png"
+             alt="Persona caminando y usando sus manos, ilustrando movilidad y coordinación motora." />
       </div>
       <div class="card-body">
-        <span class="card-category">Grupo 3</span>
-        <h2 class="card-title">Funciones físicas y motoras</h2>
-        <ul class="card-items">
-          <li>Caminar</li>
-          <li>Realizar tareas manuales</li>
-        </ul>
+        <span class="card-category">Grupo 3 de 5</span>
+        <h2 class="card-title">Funciones físicas<br>y motoras</h2>
+        <hr class="card-rule" aria-hidden="true" />
+        <div>
+          <p class="section-label">Conceptos clave</p>
+          <ul class="card-items" aria-label="Conceptos del grupo">
+            <li>Caminar</li>
+            <li>Realizar tareas manuales</li>
+          </ul>
+        </div>
         <p class="card-note">
-          Ambas implican movilidad y coordinación motora.
+          <strong>¿Por qué se agrupan?</strong> Ambas implican movilidad y coordinación motora del cuerpo.
         </p>
       </div>
-    </div>
+    </article>
 
     <!-- Tarjeta 4 -->
-    <div class="card" id="card-3">
-      <div class="card-img">
-        <span class="card-num">4</span>
-        <img src="img/autonomia.jpg" alt="Funciones de autonomía personal" />
+    <article class="card" id="card-3"
+             aria-label="Tarjeta 4 de 5: Funciones de autonomía personal">
+      <div class="card-img-panel">
+        <span class="card-badge" aria-hidden="true">Grupo 04</span>
+        <img src="img/IMG4.png"
+             alt="Persona realizando labores cotidianas y de autocuidado, representando independencia personal." />
       </div>
       <div class="card-body">
-        <span class="card-category">Grupo 4</span>
-        <h2 class="card-title">Funciones de autonomía personal</h2>
-        <ul class="card-items">
-          <li>Trabajar</li>
-          <li>Velar por sí mismo</li>
-        </ul>
+        <span class="card-category">Grupo 4 de 5</span>
+        <h2 class="card-title">Funciones de<br>autonomía personal</h2>
+        <hr class="card-rule" aria-hidden="true" />
+        <div>
+          <p class="section-label">Conceptos clave</p>
+          <ul class="card-items" aria-label="Conceptos del grupo">
+            <li>Trabajar</li>
+            <li>Velar por sí mismo</li>
+          </ul>
+        </div>
         <p class="card-note">
-          Se relacionan con independencia, desempeño laboral y cuidado personal.
+          <strong>¿Por qué se agrupan?</strong> Se relacionan con la independencia, el desempeño laboral y el cuidado personal.
         </p>
       </div>
-    </div>
+    </article>
 
     <!-- Tarjeta 5 -->
-    <div class="card" id="card-4">
-      <div class="card-img">
-        <span class="card-num">5</span>
-        <img src="img/vital.jpg" alt="Funciones vitales" />
+    <article class="card" id="card-4"
+             aria-label="Tarjeta 5 de 5: Funciones vitales">
+      <div class="card-img-panel">
+        <span class="card-badge" aria-hidden="true">Grupo 05</span>
+        <img src="img/IMG5.png"
+             alt="Representación visual de la respiración como proceso vital e indispensable para la vida." />
       </div>
       <div class="card-body">
-        <span class="card-category">Grupo 5</span>
+        <span class="card-category">Grupo 5 de 5</span>
         <h2 class="card-title">Funciones vitales</h2>
-        <ul class="card-items">
-          <li>Respirar</li>
-        </ul>
+        <hr class="card-rule" aria-hidden="true" />
+        <div>
+          <p class="section-label">Conceptos clave</p>
+          <ul class="card-items" aria-label="Conceptos del grupo">
+            <li>Respirar</li>
+          </ul>
+        </div>
         <p class="card-note">
-          Es una función esencial y se considera aparte por su carácter indispensable para la vida.
+          <strong>¿Por qué se distingue?</strong> Es una función esencial y se considera aparte por su carácter indispensable para la vida.
         </p>
       </div>
-    </div>
+    </article>
 
   </div>
-  <!-- /cards-viewport -->
 
-  <!-- Controles de navegación -->
-  <div class="controls">
-    <button class="btn btn-prev" id="btnPrev" onclick="changeCard(-1)" disabled>
+  <!-- ═══════════════════════════════════════
+       CONTROLES
+  ════════════════════════════════════════ -->
+  <nav class="bottom-bar" aria-label="Navegación entre tarjetas">
+
+    <button class="btn-nav btn-prev" id="btnPrev"
+            onclick="changeCard(-1)" disabled
+            aria-label="Tarjeta anterior">
       &#8592; Anterior
     </button>
 
-    <div class="dots" id="dots">
-      <div class="dot active" onclick="goTo(0)"></div>
-      <div class="dot" onclick="goTo(1)"></div>
-      <div class="dot" onclick="goTo(2)"></div>
-      <div class="dot" onclick="goTo(3)"></div>
-      <div class="dot" onclick="goTo(4)"></div>
+    <div class="dots" role="tablist" aria-label="Ir directamente a una tarjeta">
+      <button class="dot" role="tab" aria-label="Tarjeta 1" aria-current="true"  onclick="goTo(0)"></button>
+      <button class="dot" role="tab" aria-label="Tarjeta 2" aria-current="false" onclick="goTo(1)"></button>
+      <button class="dot" role="tab" aria-label="Tarjeta 3" aria-current="false" onclick="goTo(2)"></button>
+      <button class="dot" role="tab" aria-label="Tarjeta 4" aria-current="false" onclick="goTo(3)"></button>
+      <button class="dot" role="tab" aria-label="Tarjeta 5" aria-current="false" onclick="goTo(4)"></button>
     </div>
 
-    <button class="btn btn-next" id="btnNext" onclick="changeCard(1)">
+    <button class="btn-nav btn-next" id="btnNext"
+            onclick="changeCard(1)"
+            aria-label="Tarjeta siguiente">
       Siguiente &#8594;
     </button>
-  </div>
 
-</div><!-- /app -->
+  </nav>
 
-<!-- Audio local -->
-<audio id="mainAudio" src="audio/modulo3.mp3" preload="auto"></audio>
+</div>
 
-<!-- Botón altavoz fijo -->
-<button id="audioBtn" title="Reproducir audio" onclick="replayAudio()">&#128266;</button>
+<!-- Audio (autoplay silencioso) -->
+<audio id="mainAudio" src="audio/audio.mp3" preload="auto" aria-hidden="true"></audio>
 
-<!-- Botón fallback si autoplay bloqueado -->
-<button id="playFallback" onclick="startAudio()">&#9654; Reproducir audio</button>
+<!-- Único botón de audio — solo aparece si el navegador bloquea el autoplay -->
+<button id="playFallback"
+        onclick="startAudio()"
+        aria-label="Reproducir audio de la presentación">
+  &#9654; Reproducir audio
+</button>
 
-<!-- ============================================================
-     JAVASCRIPT
-============================================================ -->
 <script>
-  /* ---- Estado ---- */
-  var current = 0;
-  var total   = 5;
+  var current     = 0;
+  var total       = 5;
   var isAnimating = false;
 
-  /* ---- Elementos DOM ---- */
-  var cards       = document.querySelectorAll('.card');
-  var dots        = document.querySelectorAll('.dot');
-  var btnPrev     = document.getElementById('btnPrev');
-  var btnNext     = document.getElementById('btnNext');
-  var progressFill  = document.getElementById('progressFill');
-  var progressLabel = document.getElementById('progressLabel');
-  var audio       = document.getElementById('mainAudio');
-  var playFallback = document.getElementById('playFallback');
+  var announcements = [
+    'Grupo 1: Funciones cognitivas y de aprendizaje. Conceptos: Pensar y Aprender.',
+    'Grupo 2: Funciones de comunicación. Conceptos: Hablar, Oír y Ver.',
+    'Grupo 3: Funciones físicas y motoras. Conceptos: Caminar y Realizar tareas manuales.',
+    'Grupo 4: Funciones de autonomía personal. Conceptos: Trabajar y Velar por sí mismo.',
+    'Grupo 5: Funciones vitales. Concepto: Respirar.'
+  ];
 
-  /* ---- Inicializar primera tarjeta ---- */
+  var cards        = document.querySelectorAll('.card');
+  var dots         = document.querySelectorAll('.dot');
+  var btnPrev      = document.getElementById('btnPrev');
+  var btnNext      = document.getElementById('btnNext');
+  var progFill     = document.getElementById('progressFill');
+  var progLabel    = document.getElementById('progressLabel');
+  var progPct      = document.getElementById('progressPct');
+  var liveRegion   = document.getElementById('liveRegion');
+  var audio        = document.getElementById('mainAudio');
+  var fallbackBtn  = document.getElementById('playFallback');
+
   window.addEventListener('load', function () {
-    // Mostrar primera tarjeta con animación
-    requestAnimationFrame(function () {
-      cards[0].classList.add('visible');
-    });
-
-    // Intentar autoplay
-    var promise = audio.play();
-    if (promise !== undefined) {
-      promise.catch(function () {
-        // Autoplay bloqueado: mostrar botón
-        playFallback.style.display = 'block';
-      });
-    }
+    requestAnimationFrame(function () { cards[0].classList.add('visible'); });
+    attemptPlay();
   });
 
-  /* ---- Navegar tarjetas ---- */
+  function attemptPlay() {
+    audio.currentTime = 0;
+    var p = audio.play();
+    if (p !== undefined) {
+      p.catch(function () { fallbackBtn.classList.add('show'); });
+    }
+  }
+
+  function startAudio() {
+    audio.play()
+      .then(function () { fallbackBtn.classList.remove('show'); })
+      .catch(function () { fallbackBtn.classList.add('show'); });
+  }
+
   function changeCard(dir) {
     var next = current + dir;
     if (next < 0 || next >= total || isAnimating) return;
@@ -614,8 +838,6 @@
   function goTo(index, dir) {
     if (index === current || isAnimating) return;
     isAnimating = true;
-
-    // Determinar dirección si no fue provista
     if (dir === undefined) dir = index > current ? 1 : -1;
 
     var outClass = dir > 0 ? 'slide-out-left'  : 'slide-out-right';
@@ -624,14 +846,11 @@
     var oldCard = cards[current];
     var newCard = cards[index];
 
-    // Salida tarjeta actual
     oldCard.classList.remove('visible');
     oldCard.classList.add(outClass);
 
     setTimeout(function () {
       oldCard.classList.remove('active', outClass);
-
-      // Entrada tarjeta nueva
       newCard.classList.add('active', inClass);
 
       requestAnimationFrame(function () {
@@ -643,46 +862,34 @@
 
       current = index;
       updateUI();
+      attemptPlay();
 
-      setTimeout(function () { isAnimating = false; }, 480);
-    }, 380);
+      liveRegion.textContent = '';
+      setTimeout(function () {
+        liveRegion.textContent = 'Tarjeta ' + (current+1) + ' de ' + total + '. ' + announcements[current];
+      }, 60);
+
+      setTimeout(function () { isAnimating = false; }, 460);
+    }, 340);
   }
 
-  /* ---- Actualizar UI ---- */
   function updateUI() {
-    // Botones
     btnPrev.disabled = current === 0;
     btnNext.disabled = current === total - 1;
 
-    // Puntos
     dots.forEach(function (d, i) {
-      d.classList.toggle('active', i === current);
+      d.setAttribute('aria-current', i === current ? 'true' : 'false');
     });
 
-    // Barra de progreso
-    var pct = ((current + 1) / total) * 100;
-    progressFill.style.width = pct + '%';
-    progressLabel.textContent = (current + 1) + ' de ' + total;
+    var pct = Math.round(((current + 1) / total) * 100);
+    progFill.style.width  = pct + '%';
+    progLabel.textContent = (current + 1) + ' de ' + total;
+    progPct.textContent   = pct + '%';
   }
 
-  /* ---- Audio ---- */
-  function startAudio() {
-    audio.play().then(function () {
-      playFallback.style.display = 'none';
-    }).catch(function () {
-      playFallback.style.display = 'block';
-    });
-  }
-
-  function replayAudio() {
-    audio.currentTime = 0;
-    startAudio();
-  }
-
-  /* ---- Teclado ---- */
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  changeCard(1);
-    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    changeCard(-1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeCard(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeCard(-1);
   });
 </script>
 
